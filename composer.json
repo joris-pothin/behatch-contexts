@@ -10,23 +10,27 @@
     "type": "library",
     "license": "beerware",
     "require": {
-        "php": "^8.0",
+        "php": "^8.2",
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "behat/behat": "^3.8",
-        "friends-of-behat/mink-extension": "^2.5",
+        "behat/behat": "^3.14",
+        "friends-of-behat/mink-extension": "^2.7",
         "justinrainbow/json-schema": "^5.2",
-        "symfony/dom-crawler": "^4.4|^5.4|^6.0",
-        "symfony/http-foundation": "^5.4|^6.0",
-        "symfony/property-access": "^5.4|^6.0"
+        "symfony/dom-crawler": "^6.0|^7.0",
+        "symfony/http-foundation": "^6.0|^7.0",
+        "symfony/property-access": "^6.0|^7.0",
+        "rector/rector": "^1.2",
+        "symfony/http-client": "^6.0|^7.0",
+        "symfony/mime": "^6.0|^7.0"
     },
     "require-dev": {
         "atoum/atoum": "^4.0",
-        "behat/mink-goutte-driver": "^1.2",
-        "behat/mink-selenium2-driver": "^1.4",
-        "fabpot/goutte": "^3.3",
-        "guzzlehttp/guzzle": "^6.5"
+        "behat/mink-selenium2-driver": "^1.7",
+        "guzzlehttp/guzzle": "^6.5",
+        "behat/mink-browserkit-driver": "^2.2",
+        "behat/mink": "^1.11",
+        "friends-of-behat/mink-debug-extension": "^2.1"
     },
     "autoload": {
         "psr-4": {

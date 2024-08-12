@@ -5,11 +5,8 @@ namespace Behatch\HttpCall;
 
 class HttpCallResult
 {
-    private $value;
-
-    public function __construct($value)
+    public function __construct(private $value)
     {
-        $this->value = $value;
     }
 
     public function update($value): void

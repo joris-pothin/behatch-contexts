@@ -7,19 +7,16 @@ use Behat\Mink\Mink;
 
 class Request
 {
-    private Mink $mink;
     private $client;
 
-    public function __construct(Mink $mink)
+    public function __construct(private readonly Mink $mink)
     {
-        $this->mink = $mink;
     }
 
     /**
-     * @param mixed $arguments
      * @return mixed
      */
-    public function __call(string $name, $arguments)
+    public function __call(string $name, mixed $arguments)
     {
         return \call_user_func_array([$this->getClient(), $name], $arguments);
     }

@@ -8,15 +8,13 @@ use Behat\Gherkin\Node\PyStringNode;
 
 class SystemContext implements Context
 {
-    private string $root;
     private $output;
     private $lastExecutionTime;
     private $lastReturnCode;
     private array $createdFiles = [];
 
-    public function __construct($root = '.')
+    public function __construct(private readonly string $root = '.')
     {
-        $this->root = $root;
     }
 
     public static function getTranslationResources(): bool|array
@@ -127,7 +125,7 @@ class SystemContext implements Context
 
         $check = false;
         foreach ($this->output as $line) {
-            if (\preg_match($regex, $line) === 1) {
+            if (\preg_match($regex, (string) $line) === 1) {
                 $check = true;
                 break;
             }
@@ -155,7 +153,7 @@ class SystemContext implements Context
         $regex = '~' . $text . '~ui';
 
         foreach ($this->output as $line) {
-            if (\preg_match($regex, $line) === 1) {
+            if (\preg_match($regex, (string) $line) === 1) {
                 throw new \Exception(
                     \sprintf(
                         "The text '%s' was found somewhere on output of command.\n%s",

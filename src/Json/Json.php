@@ -6,7 +6,7 @@ namespace Behatch\Json;
 use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class Json
+class Json implements \Stringable
 {
     protected mixed $content;
 
@@ -55,7 +55,7 @@ class Json
 
     public function __toString(): string
     {
-        return $this->encode(false);
+        return (string) $this->encode(false);
     }
 
     /**

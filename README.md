@@ -1,6 +1,6 @@
 # Updates done to original (archived) "behatch/contexts"
 
-- Updated to minimum of PHP 8 as major version (`^8.0`)
+- Updated to minimum of PHP 8 as major version (`^8.3`)
 - Removed allowing Symfony 2 & Symfony 3
 - Changed Symfony 4 & 5 to LTS versions minimum versions
 - Allowing Symfony 6
@@ -19,7 +19,7 @@ Add the following to your `composer.json`
 "repositories": [
     {
         "type": "vcs",
-        "url": "git@github.com:rkeet/behatch-contexts.git"
+        "url": "git@github.com:joris-pothin/behatch-contexts.git"
     }
 ],
 ```
@@ -33,7 +33,7 @@ Change your branch dependency from
 to
 
 ```json
-"behatch/contexts": "dev-php80 as 3.3.0",
+"behatch/contexts": "dev-sf7 as 3.3.0",
 ```
 
 ---
@@ -138,8 +138,3 @@ default:
                 - behatch:context:debug:
                     screenshotDir: "var"
 ```
-
-Translation
------------
-
-[![See more information on Transifex.com](https://www.transifex.com/projects/p/behatch-contexts/resource/enxliff/chart/image_png)](https://www.transifex.com/projects/p/behatch-contexts/)

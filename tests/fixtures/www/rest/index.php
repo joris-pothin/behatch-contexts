@@ -8,7 +8,7 @@ header('Expires: ' . date('c', time() + 60));
 header('Content-Type: text/html; charset=utf-8');
 
 $body = file_get_contents('php://input');
-if ($_SERVER['REQUEST_METHOD'] === 'PUT' && !empty($body)) {
+if ($_SERVER['REQUEST_METHOD'] === 'PUT' && !($body === '' || $body === '0' || $body === false)) {
     // For PUT with body we simulate an empty response with 204
     header("HTTP/1.0 204 No Content");
     die();
@@ -22,7 +22,7 @@ You have sent a <?php print $_SERVER['REQUEST_METHOD']; ?> request.
     <br/><?php print $key ?> : <?php print $value; ?>
 <?php endforeach; ?>
 
-<?php if (count($_REQUEST) === 0): ?>
+<?php if ($_REQUEST === []): ?>
     <br/>No parameter received.
 <?php else: ?>
     <br/><?php print count($_REQUEST); ?> parameter(s) received.

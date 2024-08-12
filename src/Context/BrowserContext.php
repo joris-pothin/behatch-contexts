@@ -118,7 +118,7 @@ class BrowserContext extends BaseContext
     public function iFillInWithTheCurrentDateAndModifier($field, $modifier)
     {
         return $this->getMinkContext()
-            ->fillField($field, \date($this->dateFormat, \strtotime($modifier)));
+            ->fillField($field, \date($this->dateFormat, \strtotime((string) $modifier)));
     }
 
     /**
@@ -276,7 +276,7 @@ class BrowserContext extends BaseContext
                 $node = $this->getSession()->getPage()->findAll('css', $element);
                 $this->assertCount(1, $node);
                 $found = true;
-            } catch (ExpectationException $e) {
+            } catch (ExpectationException) {
                 /* Intentionally leave blank */
             }
         } while (!$found && (\time() - $startTime < $count));
@@ -350,7 +350,7 @@ class BrowserContext extends BaseContext
     public function theElementShouldBeDisabled($element): void
     {
         $this->not(
-            function () use ($element) {
+            function () use ($element): void {
                 $this->theElementShouldBeEnabled($element);
             },
             "The element '$element' is not disabled"
@@ -389,7 +389,7 @@ class BrowserContext extends BaseContext
     public function theSelectBoxShouldNotContain($select, $option): void
     {
         $this->not(
-            function () use ($select, $option) {
+            function () use ($select, $option): void {
                 $this->theSelectBoxShouldContain($select, $option);
             },
             "The '$select' select box does contain the '$option' option"
@@ -424,7 +424,7 @@ class BrowserContext extends BaseContext
         $exception = new \Exception("The element '$element' is visible");
 
         $this->not(
-            function () use ($element) {
+            function () use ($element): void {
                 $this->theElementShouldBeVisible($element);
             },
             $exception
@@ -463,27 +463,17 @@ class BrowserContext extends BaseContext
     {
         $elapsed = \time() - $this->timerStartedAt;
 
-        switch ($comparison) {
-            case 'less':
-                $this->assertTrue(
-                    $elapsed < $expected,
-                    "Elapsed time '$elapsed' is not less than '$expected' seconds."
-                );
-                break;
-
-            case 'more':
-                $this->assertTrue(
-                    $elapsed > $expected,
-                    "Elapsed time '$elapsed' is not more than '$expected' seconds."
-                );
-                break;
-
-            case 'equal':
-                $this->assertSame($elapsed, $expected, "Elapsed time '$elapsed' is not '$expected' seconds.");
-                break;
-
-            default:
-                throw new PendingException("Unknown comparison '$comparison'. Use 'less', 'more' or 'equal'");
-        }
+        match ($comparison) {
+            'less' => $this->assertTrue(
+                $elapsed < $expected,
+                "Elapsed time '$elapsed' is not less than '$expected' seconds."
+            ),
+            'more' => $this->assertTrue(
+                $elapsed > $expected,
+                "Elapsed time '$elapsed' is not more than '$expected' seconds."
+            ),
+            'equal' => $this->assertSame($elapsed, $expected, "Elapsed time '$elapsed' is not '$expected' seconds."),
+            default => throw new PendingException("Unknown comparison '$comparison'. Use 'less', 'more' or 'equal'"),
+        };
     }
 }

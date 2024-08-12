@@ -10,11 +10,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BrowserKit
 {
-    protected Mink $mink;
-
-    public function __construct(Mink $mink)
+    public function __construct(protected Mink $mink)
     {
-        $this->mink = $mink;
     }
 
     public function getMethod()
@@ -41,11 +38,7 @@ class BrowserKit
     {
         $client = $this->mink->getSession()->getDriver()->getClient();
         // BC layer for BrowserKit 2.2.x and older
-        if (\method_exists($client, 'getInternalRequest')) {
-            $request = $client->getInternalRequest();
-        } else {
-            $request = $client->getRequest();
-        }
+        $request = \method_exists($client, 'getInternalRequest') ? $client->getInternalRequest() : $client->getRequest();
 
         return $request;
     }
@@ -120,7 +113,7 @@ class BrowserKit
 
     public function getHttpRawHeader($name)
     {
-        $name = strtolower($name);
+        $name = strtolower((string) $name);
         $headers = $this->getHttpHeaders();
 
         if (isset($headers[$name])) {

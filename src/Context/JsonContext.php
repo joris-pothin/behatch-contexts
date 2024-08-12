@@ -15,12 +15,10 @@ class JsonContext extends BaseContext
     protected const NODE_VALUE_IS = 'The node `%s` value is `%s`';
 
     protected JsonInspector $inspector;
-    protected HttpCallResultPool $httpCallResultPool;
 
-    public function __construct(HttpCallResultPool $httpCallResultPool, string $evaluationMode = 'javascript')
+    public function __construct(protected HttpCallResultPool $httpCallResultPool, string $evaluationMode = 'javascript')
     {
         $this->inspector = new JsonInspector($evaluationMode);
-        $this->httpCallResultPool = $httpCallResultPool;
     }
 
     /**
@@ -43,7 +41,7 @@ class JsonContext extends BaseContext
     public function theResponseShouldNotBeInJson(): void
     {
         $this->not(
-            [$this, 'theResponseShouldBeInJson'],
+            $this->theResponseShouldBeInJson(...),
             'The response is in JSON'
         );
     }
@@ -90,7 +88,7 @@ class JsonContext extends BaseContext
         $json = $this->getJson();
         $actual = $this->inspector->evaluate($json, $node);
 
-        if (\preg_match($pattern, $actual) === 0) {
+        if (\preg_match($pattern, (string) $actual) === 0) {
             throw new \Exception(
                 \sprintf(self::NODE_VALUE_IS, $node, \json_encode($actual, JSON_THROW_ON_ERROR))
             );
@@ -120,7 +118,7 @@ class JsonContext extends BaseContext
     public function theJsonNodeShouldNotBeNull($node): void
     {
         $this->not(
-            function () use ($node) {
+            function () use ($node): void {
                 $this->theJsonNodeShouldBeNull($node);
             },
             \sprintf('The node %s should not be null', $node)
@@ -296,9 +294,7 @@ class JsonContext extends BaseContext
     public function theJsonNodeShouldNotExist($name): void
     {
         $this->not(
-            function () use ($name) {
-                return $this->theJsonNodeShouldExist($name);
-            },
+            fn() => $this->theJsonNodeShouldExist($name),
             "The node '$name' exists."
         );
     }
@@ -323,7 +319,7 @@ class JsonContext extends BaseContext
     public function theJsonShouldBeInvalidAccordingToThisSchema(PyStringNode $schema): void
     {
         $this->not(
-            function () use ($schema) {
+            function () use ($schema): void {
                 $this->theJsonShouldBeValidAccordingToThisSchema($schema);
             },
             'Expected to receive invalid json, got valid one'
@@ -357,7 +353,7 @@ class JsonContext extends BaseContext
         $this->checkSchemaFile($filename);
 
         $this->not(
-            function () use ($filename) {
+            function () use ($filename): void {
                 $this->theJsonShouldBeValidAccordingToTheSchema($filename);
             },
             "The schema was valid"
@@ -425,7 +421,7 @@ class JsonContext extends BaseContext
     public function theJsonShouldNotBeValidAccordingToTheSwaggerSchema($dumpPath, $schemaName): void
     {
         $this->not(
-            function () use ($dumpPath, $schemaName) {
+            function () use ($dumpPath, $schemaName): void {
                 $this->theJsonShouldBeValidAccordingToTheSwaggerSchema($dumpPath, $schemaName);
             },
             'JSON Schema matches but it should not'

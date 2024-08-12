@@ -19,26 +19,12 @@ default:
         Behat\MinkExtension:
             base_url: 'http://localhost:8080'
             files_path: 'tests/fixtures/files'
-            goutte: ~
+            browserkit_http: ~
             selenium2:
                 capabilities:
-                    chrome:
-                        switches:
-                            - "--headless"
-                            - "--disable-gpu"
-                            - "--no-sandbox"
-                    extra_capabilities:
-                        "goog:chromeOptions":
-                            w3c: false
-            browser_name: 'chrome'
+                    firefox: ~
+            browser_name: 'firefox'
             sessions:
                 default:
-                    goutte: ~
-                symfony2:
-                    goutte: ~
+                    selenium2: ~
         Behatch\Extension: ~
-
-symfony2:
-    extensions:
-        Behat\MinkExtension:
-            default_session: symfony2

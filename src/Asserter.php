@@ -36,10 +36,10 @@ trait Asserter
      */
     protected function assertContains($expected, $actual, string $message = null): void
     {
-        $regex = '/' . \preg_quote($expected, '/') . '/ui';
+        $regex = '/' . \preg_quote((string) $expected, '/') . '/ui';
 
         $this->assert(
-            \preg_match($regex, $actual) > 0,
+            \preg_match($regex, (string) $actual) > 0,
             $message ?: "The string '$expected' was not found."
         );
     }
@@ -52,7 +52,7 @@ trait Asserter
         $message = $message ?: "The string '$expected' was found.";
 
         $this->not(
-            function () use ($expected, $actual) {
+            function () use ($expected, $actual): void {
                 $this->assertContains($expected, $actual);
             },
             $message
@@ -111,7 +111,7 @@ trait Asserter
         $message = $message ?: "The array has key '$key'";
 
         $this->not(
-            function () use ($key, $array) {
+            function () use ($key, $array): void {
                 $this->assertArrayHasKey($key, $array);
             },
             $message
@@ -132,7 +132,7 @@ trait Asserter
     protected function assertFalse($value, string $message = 'The value is true'): void
     {
         $this->not(
-            function () use ($value) {
+            function () use ($value): void {
                 $this->assertTrue($value);
             },
             $message
