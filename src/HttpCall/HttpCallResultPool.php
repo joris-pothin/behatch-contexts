@@ -5,7 +5,7 @@ namespace Behatch\HttpCall;
 
 class HttpCallResultPool
 {
-    private ?HttpCallResult $result;
+    private ?HttpCallResult $result = null;
 
     public function store(HttpCallResult $result): void
     {

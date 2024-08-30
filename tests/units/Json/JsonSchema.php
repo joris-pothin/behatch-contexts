@@ -40,7 +40,7 @@ class JsonSchema extends \atoum
         $json = new \Behatch\Json\Json('{ "foo": { "bar": "foobar" } }');
         $validator = new \JsonSchema\Validator();
         $this->exception(
-            function () use ($schema, $json, $validator) {
+            function () use ($schema, $json, $validator): void {
                 $schema->validate($json, $validator);
             }
         )

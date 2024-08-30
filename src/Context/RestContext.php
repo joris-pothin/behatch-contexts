@@ -10,11 +10,10 @@ use Behatch\HttpCall\Request;
 
 class RestContext extends BaseContext
 {
-    protected Request\BrowserKit|Request\Goutte|Request $request;
-
-    public function __construct(Request $request)
+    public function __construct(
+        protected Request $request
+    )
     {
-        $this->request = $request;
     }
 
     /**
@@ -51,7 +50,7 @@ class RestContext extends BaseContext
 
             if (\is_string($row['value']) && str_starts_with($row['value'], '@')) {
                 $files[$row['key']] = \rtrim(
-                        $this->getMinkParameter('files_path'),
+                        (string) $this->getMinkParameter('files_path'),
                         DIRECTORY_SEPARATOR
                     ) . DIRECTORY_SEPARATOR . \substr($row['value'], 1);
             } else {
@@ -130,7 +129,7 @@ class RestContext extends BaseContext
     public function theHeaderShouldNotBeEqualTo(string $name, string $value): void
     {
         $actual = $this->getSession()->getResponseHeader($name);
-        if (\strtolower($value) === \strtolower($actual)) {
+        if (\strtolower($value) === \strtolower((string) $actual)) {
             throw new ExpectationException(
                 "The header '$name' is equal to '$actual'",
                 $this->getSession()->getDriver()
@@ -147,7 +146,7 @@ class RestContext extends BaseContext
             \sprintf(
                 'The %s function is deprecated since version 3.1 and will be removed in 4.0. Use the %s::theHeaderShouldContain function instead.',
                 __METHOD__,
-                __CLASS__
+                self::class
             ),
             E_USER_DEPRECATED
         );
@@ -194,7 +193,7 @@ class RestContext extends BaseContext
     public function theHeaderShouldNotExist(string $name): void
     {
         $this->not(
-            function () use ($name) {
+            function () use ($name): void {
                 $this->theHeaderShouldExist($name);
             },
             "The header '$name' exists"
@@ -228,7 +227,7 @@ class RestContext extends BaseContext
     public function theHeaderShouldNotMatch($name, $regex): void
     {
         $this->not(
-            function () use ($name, $regex) {
+            function () use ($name, $regex): void {
                 $this->theHeaderShouldMatch($name, $regex);
             },
             "The header '$name' should not match '$regex'"
@@ -295,7 +294,7 @@ class RestContext extends BaseContext
         $text = '';
         $headers = $this->request->getHttpHeaders();
 
-        foreach ($headers as $name => $value) {
+        foreach (array_keys($headers) as $name) {
             $text .= $name . ': ' . $this->request->getHttpHeader($name) . "\n";
         }
         echo $text;
@@ -311,7 +310,7 @@ class RestContext extends BaseContext
 
         $headers = '';
         foreach ($this->request->getServer() as $name => $value) {
-            if ($name !== 'HTTPS' && !\str_starts_with($name, 'HTTP_')) {
+            if ($name !== 'HTTPS' && !\str_starts_with((string) $name, 'HTTP_')) {
                 $headers .= " -H '$name: $value'";
             }
         }

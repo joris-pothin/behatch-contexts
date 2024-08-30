@@ -16,9 +16,7 @@ class ClassResolver implements BaseClassResolver
     {
         $className = \preg_replace_callback(
             '/(^\w|:\w)/',
-            static function ($matches) {
-                return \str_replace(':', '\\', \strtoupper($matches[0]));
-            },
+            static fn($matches) => \str_replace(':', '\\', \strtoupper((string) $matches[0])),
             $contextClass
         );
 

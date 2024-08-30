@@ -28,7 +28,7 @@ class XmlContext extends BaseContext
     public function theResponseShouldNotBeInXml(): void
     {
         $this->not(
-            [$this, 'theResponseShouldBeInXml'],
+            $this->theResponseShouldBeInXml(...),
             'The response is in XML'
         );
     }
@@ -61,7 +61,7 @@ class XmlContext extends BaseContext
     public function theXmlElementShouldNotExist($element): void
     {
         $this->not(
-            function () use ($element) {
+            function () use ($element): void {
                 $this->theXmlElementShouldExist($element);
             },
             "The element '$element' exists."
@@ -94,7 +94,7 @@ class XmlContext extends BaseContext
     public function theXmlElementShouldNotBeEqualTo($element, $text): void
     {
         $this->not(
-            function () use ($element, $text) {
+            function () use ($element, $text): void {
                 $this->theXmlElementShouldBeEqualTo($element, $text);
             },
             "The element '$element' value is not '$text'"
@@ -264,7 +264,7 @@ class XmlContext extends BaseContext
         try {
             $this->getDom();
         } catch (\DOMException $e) {
-            throw new \RuntimeException($e->getMessage());
+            throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 

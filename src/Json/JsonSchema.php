@@ -8,12 +8,8 @@ use JsonSchema\Validator;
 
 class JsonSchema extends Json
 {
-    private ?string $uri;
-
-    public function __construct($content, $uri = null)
+    public function __construct($content, private readonly ?string $uri = null)
     {
-        $this->uri = $uri;
-
         parent::__construct($content);
     }
 

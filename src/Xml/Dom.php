@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Behatch\Xml;
 
-class Dom
+class Dom implements \Stringable
 {
-    private \DomDocument $dom;
+    private readonly \DomDocument $dom;
 
     /**
      * @throws \DomException
@@ -20,11 +20,11 @@ class Dom
         $this->throwError();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $this->dom->formatOutput = true;
 
-        return $this->dom->saveXML();
+        return (string) $this->dom->saveXML();
     }
 
     /**
@@ -51,7 +51,7 @@ class Dom
             $this->dom->relaxNGValidateSource($ng);
             $this->throwError();
         } catch (\DOMException $e) {
-            throw new \RuntimeException($e->getMessage());
+            throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -71,7 +71,7 @@ class Dom
         $namespaces = $this->getNamespaces();
 
         foreach ($namespaces as $prefix => $namespace) {
-            if (empty($prefix) && $this->hasDefaultNamespace()) {
+            if (($prefix === 0 || ($prefix === '' || $prefix === '0')) && $this->hasDefaultNamespace()) {
                 $prefix = 'rootns';
             }
             $xpath->registerNamespace($prefix, $namespace);
@@ -85,7 +85,7 @@ class Dom
     {
         $namespaces = $this->getNamespaces();
 
-        if (!empty($namespaces) && $this->hasDefaultNamespace()) {
+        if ($namespaces !== [] && $this->hasDefaultNamespace()) {
             for ($i = 0; $i < 2; ++$i) {
                 $element = preg_replace('/\/(\w+)(\[[^]]+\])?\//', '/rootns:$1$2/', $element);
             }

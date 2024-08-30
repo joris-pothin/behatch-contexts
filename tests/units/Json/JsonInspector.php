@@ -20,7 +20,7 @@ class JsonInspector extends \atoum
         $inspector = $this->newTestedInstance('php');
 
         $this->exception(
-            function () use ($json, $inspector) {
+            function () use ($json, $inspector): void {
                 $inspector->evaluate($json, 'foo.bar');
             }
         )

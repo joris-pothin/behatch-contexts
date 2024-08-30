@@ -8,13 +8,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class JsonInspector
 {
-    private string $evaluationMode;
+    private readonly PropertyAccessor $accessor;
 
-    private PropertyAccessor $accessor;
-
-    public function __construct(string $evaluationMode)
+    public function __construct(private readonly string $evaluationMode)
     {
-        $this->evaluationMode = $evaluationMode;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 

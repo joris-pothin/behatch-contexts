@@ -12,13 +12,13 @@ class Json extends \atoum
     {
         $json = $this->newTestedInstance('{"foo": "bar"}');
         $this->object($json)
-            ->isInstanceOf('Behatch\Json\Json');
+            ->isInstanceOf(\Behatch\Json\Json::class);
     }
 
     public function test_construct_invalid_json(): void
     {
         $this->exception(
-            function () {
+            function (): void {
                 $json = $this->newTestedInstance('{{json');
             }
         )
@@ -50,7 +50,7 @@ class Json extends \atoum
         $json = $this->newTestedInstance('{"foo":"bar"}');
 
         $this->exception(
-            function () use ($json, $accessor) {
+            function () use ($json, $accessor): void {
                 $json->read('jeanmarc', $accessor);
             }
         )

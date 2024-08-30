@@ -18,14 +18,10 @@ if (isset($_GET['logout'])) {
     header('HTTP/1.0 401 Unauthorized');
     $_SESSION['login'] = true;
     echo 'NONE SHALL PASS !';
+} elseif ($_SERVER['PHP_AUTH_USER'] === $username
+&& $_SERVER['PHP_AUTH_PW'] === $password) {
+    echo 'Successfuly logged in';
 } else {
-    if (
-        $_SERVER['PHP_AUTH_USER'] === $username
-        && $_SERVER['PHP_AUTH_PW'] === $password
-    ) {
-        echo 'Successfuly logged in';
-    } else {
-        unset($_SESSION['login']);
-        header('Location: ' . $_SERVER['PHP_SELF']);
-    }
+    unset($_SESSION['login']);
+    header('Location: ' . $_SERVER['PHP_SELF']);
 }

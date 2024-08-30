@@ -12,9 +12,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class HttpCallListener implements EventSubscriberInterface
 {
     public function __construct(
-        private ContextSupportedVoter $contextSupportedVoter,
-        private HttpCallResultPool $httpCallResultPool,
-        private Mink $mink
+        private readonly ContextSupportedVoter $contextSupportedVoter,
+        private readonly HttpCallResultPool $httpCallResultPool,
+        private readonly Mink $mink
     ) {
     }
 
@@ -30,7 +30,7 @@ class HttpCallListener implements EventSubscriberInterface
         $testResult = $event->getTestResult();
 
         if (!$testResult instanceof ExecutedStepResult) {
-            return;
+            return null;
         }
 
         $httpCallResult = new HttpCallResult(
@@ -54,5 +54,6 @@ class HttpCallListener implements EventSubscriberInterface
         } catch (\Behat\Mink\Exception\DriverException) {
             // No Mink
         }
+        return null;
     }
 }
